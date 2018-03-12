@@ -1,16 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../models');
+const models = require('../models');
 const userRouter = require('./user');
 const wikiRouter = require('./wiki');
+const Page = models.Page;
+const User = models.User;
 
 router.use('/wiki', wikiRouter);
 router.use('/user', userRouter);
 
 router.get('/', (req, res, next) => {
-  res.render('layout');
-})
-
-
+  Page.findAll()
+    .then( pages => {
+      res.render('index', {
+        pages: pages
+      });
+    });
+});
 
 module.exports = router;

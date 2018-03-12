@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
+const userRouter = require('./user');
+const wikiRouter = require('./wiki');
 
-db.User.create({
-  name: 'Jeff Gore',
-  email: 'jgore00@gmail.com'
-});
+router.use('/wiki', wikiRouter);
+router.use('/user', userRouter);
 
 router.get('/', (req, res, next) => {
-  console.log('Hello World');
-  next();
-});
+  res.render('layout');
+})
+
+
 
 module.exports = router;

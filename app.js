@@ -16,16 +16,16 @@ app.engine('html', nunjucks.render);
 app.set('view engine', 'html');
 nunjucks.configure('views', { noCache: true });
 
-// Routing
-app.use(express.static(path.join(__dirname, './public')));
-app.use('/', routes);
-
 // Logging Middleware
 app.use(morgan('dev'));
 
 // Body-Parsing options
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
+
+// Routing
+app.use(express.static(path.join(__dirname, './public')));
+app.use('/', routes);
 
 // Start the server
 models.db.sync()

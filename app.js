@@ -9,6 +9,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const http = require('http');
 const path = require('path');
+const models = require('./models');
 
 // Templating boilerplate setup
 app.engine('html', nunjucks.render);
@@ -27,7 +28,12 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
 // Start the server
-const server = app.listen(3000, (req, res, next) => {
-  console.log('Server Listening on port 3000');
-});
+models.db.sync()
+  .then(function () {
+    console.log('All tables created!');
+    app.listen(3000, function () {
+        console.log('Server is listening on port 3000!');
+    });
+  })
+  .catch(console.error.bind(console));
 

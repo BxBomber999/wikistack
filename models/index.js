@@ -79,3 +79,5 @@ module.exports = {
   Page: Page,
   User: User
 };
+
+Page.belongsTo(User, { as: 'author' });

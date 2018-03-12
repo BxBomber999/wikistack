@@ -12,12 +12,27 @@ router.get('/', function(req, res, next) {
 
 
 router.post('/', function(req, res, next) {
+
   const page = Page.build({
     title: req.body.title,
     content: req.body.pageContent
-  });
-  page.save()
-    .then( () => res.redirect(page.route));
+  })
+  const user = User.findOrCreate({
+      where: {
+        email: req.body.authorEmail,
+        name: req.body.authorName
+      }
+    })[0]
+
+    const masterPromise = Promise.all([page, user], () => {
+      return [page, user];
+    })
+  .then( ([page, user]) => {
+    page.setAuthor(user)
+    page.save()
+  })
+  .then( (page) => res.redirect(page.route))
+  .catch((err) => { throw err }) ;
 });
 
 router.get('/add', function(req, res, next) {
